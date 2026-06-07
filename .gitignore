@@ -1,0 +1,21 @@
+.env
+.venv/
+venv/
+env/
+__pycache__/
+*.py[cod]
+*.sqlite3
+db.sqlite3
+.pytest_cache/
+.coverage
+htmlcov/
+staticfiles/
+media/
+.DS_Store
+.idea/
+.vscode/
+
+# Private/Internal Docs
+INTERVIEW_QA.md
+POSTGRES_LOCAL_SETUP.md
+README_BEGINNER.md

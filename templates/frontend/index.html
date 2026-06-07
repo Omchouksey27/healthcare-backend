@@ -1,0 +1,328 @@
+{% load static %}
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Healthcare Backend Dashboard</title>
+    <link rel="stylesheet" href="{% static 'frontend/css/styles.css' %}">
+</head>
+<body data-api-base="/api">
+    <div class="app-shell">
+        <header class="topbar">
+            <div>
+                <p class="eyebrow">Healthcare Backend</p>
+                <h1>CareOps Dashboard</h1>
+            </div>
+            <div class="session-area">
+                <span id="userChip" class="user-chip">Signed out</span>
+                <button id="logoutBtn" class="icon-button hidden" type="button" title="Log out" aria-label="Log out">
+                    <span aria-hidden="true">x</span>
+                </button>
+            </div>
+        </header>
+
+        <main>
+            <section id="authSection" class="auth-layout">
+                <div class="brand-panel">
+                    <p class="eyebrow">Secure workspace</p>
+                    <h2>Patient, doctor, and assignment records in one clean dashboard.</h2>
+                    <div class="signal-grid">
+                        <div>
+                            <span class="signal-value">JWT</span>
+                            <span class="signal-label">Auth</span>
+                        </div>
+                        <div>
+                            <span class="signal-value">DRF</span>
+                            <span class="signal-label">API</span>
+                        </div>
+                        <div>
+                            <span class="signal-value">PG</span>
+                            <span class="signal-label">Database</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="auth-forms">
+                    <form id="loginForm" class="form-surface">
+                        <div class="form-head">
+                            <h2>Log in</h2>
+                            <span class="badge">Existing user</span>
+                        </div>
+                        <label>
+                            Email
+                            <input name="email" type="email" autocomplete="email" required>
+                        </label>
+                        <label>
+                            Password
+                            <input name="password" type="password" autocomplete="current-password" required>
+                        </label>
+                        <button class="primary-button" type="submit">
+                            <span aria-hidden="true">-></span>
+                            Log in
+                        </button>
+                    </form>
+
+                    <form id="registerForm" class="form-surface">
+                        <div class="form-head">
+                            <h2>Register</h2>
+                            <span class="badge badge-alt">New user</span>
+                        </div>
+                        <label>
+                            Name
+                            <input name="name" type="text" autocomplete="name" required>
+                        </label>
+                        <label>
+                            Email
+                            <input name="email" type="email" autocomplete="email" required>
+                        </label>
+                        <label>
+                            Password
+                            <input name="password" type="password" autocomplete="new-password" minlength="8" required>
+                        </label>
+                        <button class="secondary-button" type="submit">
+                            <span aria-hidden="true">+</span>
+                            Create account
+                        </button>
+                    </form>
+                </div>
+            </section>
+
+            <section id="appSection" class="hidden">
+                <section class="metrics">
+                    <article class="metric">
+                        <span class="metric-label">Patients</span>
+                        <strong id="patientCount">0</strong>
+                    </article>
+                    <article class="metric">
+                        <span class="metric-label">Doctors</span>
+                        <strong id="doctorCount">0</strong>
+                    </article>
+                    <article class="metric">
+                        <span class="metric-label">Assignments</span>
+                        <strong id="mappingCount">0</strong>
+                    </article>
+                </section>
+
+                <nav class="tabs" aria-label="Workspace sections">
+                    <button class="tab-button active" type="button" data-tab="patients">Patients</button>
+                    <button class="tab-button" type="button" data-tab="doctors">Doctors</button>
+                    <button class="tab-button" type="button" data-tab="mappings">Assignments</button>
+                </nav>
+
+                <section class="workspace-panel active" data-panel="patients">
+                    <div class="panel-head">
+                        <div>
+                            <p class="eyebrow">Records</p>
+                            <h2>Patients</h2>
+                        </div>
+                        <button id="patientResetBtn" class="ghost-button" type="button">Clear form</button>
+                    </div>
+                    <div class="work-grid">
+                        <form id="patientForm" class="form-surface compact-form">
+                            <input type="hidden" name="id">
+                            <label>
+                                Full name
+                                <input name="full_name" type="text" required>
+                            </label>
+                            <label>
+                                Date of birth
+                                <input name="date_of_birth" type="date" required>
+                            </label>
+                            <label>
+                                Gender
+                                <select name="gender" required>
+                                    <option value="">Select gender</option>
+                                    <option value="male">Male</option>
+                                    <option value="female">Female</option>
+                                    <option value="other">Other</option>
+                                    <option value="prefer_not_to_say">Prefer not to say</option>
+                                </select>
+                            </label>
+                            <label>
+                                Blood group
+                                <select name="blood_group">
+                                    <option value="unknown">Unknown</option>
+                                    <option value="A+">A+</option>
+                                    <option value="A-">A-</option>
+                                    <option value="B+">B+</option>
+                                    <option value="B-">B-</option>
+                                    <option value="AB+">AB+</option>
+                                    <option value="AB-">AB-</option>
+                                    <option value="O+">O+</option>
+                                    <option value="O-">O-</option>
+                                </select>
+                            </label>
+                            <label>
+                                Phone
+                                <input name="phone" type="tel">
+                            </label>
+                            <label>
+                                Email
+                                <input name="email" type="email">
+                            </label>
+                            <label class="span-2">
+                                Address
+                                <textarea name="address" rows="2"></textarea>
+                            </label>
+                            <label class="span-2">
+                                Medical history
+                                <textarea name="medical_history" rows="3"></textarea>
+                            </label>
+                            <label>
+                                Allergies
+                                <input name="allergies" type="text">
+                            </label>
+                            <label>
+                                Emergency contact
+                                <input name="emergency_contact" type="text">
+                            </label>
+                            <button id="patientSubmitBtn" class="primary-button span-2" type="submit">
+                                <span aria-hidden="true">+</span>
+                                Save patient
+                            </button>
+                        </form>
+
+                        <div class="table-surface">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Name</th>
+                                        <th>Age</th>
+                                        <th>Gender</th>
+                                        <th>Blood</th>
+                                        <th>Contact</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="patientTableBody"></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="workspace-panel" data-panel="doctors">
+                    <div class="panel-head">
+                        <div>
+                            <p class="eyebrow">Directory</p>
+                            <h2>Doctors</h2>
+                        </div>
+                        <button id="doctorResetBtn" class="ghost-button" type="button">Clear form</button>
+                    </div>
+                    <div class="work-grid">
+                        <form id="doctorForm" class="form-surface compact-form">
+                            <input type="hidden" name="id">
+                            <label>
+                                Full name
+                                <input name="full_name" type="text" required>
+                            </label>
+                            <label>
+                                Specialization
+                                <input name="specialization" type="text" required>
+                            </label>
+                            <label>
+                                License number
+                                <input name="license_number" type="text" required>
+                            </label>
+                            <label>
+                                Experience years
+                                <input name="experience_years" type="number" min="0" max="80" value="0">
+                            </label>
+                            <label>
+                                Email
+                                <input name="email" type="email">
+                            </label>
+                            <label>
+                                Phone
+                                <input name="phone" type="tel">
+                            </label>
+                            <label class="span-2">
+                                Clinic address
+                                <textarea name="clinic_address" rows="2"></textarea>
+                            </label>
+                            <label class="check-row span-2">
+                                <input name="available" type="checkbox" checked>
+                                Available for assignments
+                            </label>
+                            <button id="doctorSubmitBtn" class="primary-button span-2" type="submit">
+                                <span aria-hidden="true">+</span>
+                                Save doctor
+                            </button>
+                        </form>
+
+                        <div class="table-surface">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Name</th>
+                                        <th>Specialization</th>
+                                        <th>License</th>
+                                        <th>Status</th>
+                                        <th>Contact</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="doctorTableBody"></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="workspace-panel" data-panel="mappings">
+                    <div class="panel-head">
+                        <div>
+                            <p class="eyebrow">Care team</p>
+                            <h2>Assignments</h2>
+                        </div>
+                        <div class="panel-actions">
+                            <select id="mappingPatientFilter" aria-label="Filter assignments by patient">
+                                <option value="">All patients</option>
+                            </select>
+                            <button id="mappingResetBtn" class="ghost-button" type="button">All</button>
+                        </div>
+                    </div>
+                    <div class="work-grid">
+                        <form id="mappingForm" class="form-surface compact-form">
+                            <label>
+                                Patient
+                                <select name="patient" required></select>
+                            </label>
+                            <label>
+                                Doctor
+                                <select name="doctor" required></select>
+                            </label>
+                            <label class="span-2">
+                                Notes
+                                <textarea name="notes" rows="4"></textarea>
+                            </label>
+                            <button class="primary-button span-2" type="submit">
+                                <span aria-hidden="true">+</span>
+                                Assign doctor
+                            </button>
+                        </form>
+
+                        <div class="table-surface">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Patient</th>
+                                        <th>Doctor</th>
+                                        <th>Specialization</th>
+                                        <th>Assigned</th>
+                                        <th>Notes</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="mappingTableBody"></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </section>
+            </section>
+        </main>
+    </div>
+
+    <div id="toast" class="toast hidden" role="status" aria-live="polite"></div>
+    <script src="{% static 'frontend/js/app.js' %}"></script>
+</body>
+</html>

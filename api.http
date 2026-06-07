@@ -1,0 +1,81 @@
+@baseUrl = http://127.0.0.1:8000/api
+@accessToken = paste-access-token-here
+
+### Register
+POST {{baseUrl}}/auth/register/
+Content-Type: application/json
+
+{
+  "name": "Maya Patel",
+  "email": "maya@example.com",
+  "password": "StrongPass123!"
+}
+
+### Login
+POST {{baseUrl}}/auth/login/
+Content-Type: application/json
+
+{
+  "email": "maya@example.com",
+  "password": "StrongPass123!"
+}
+
+### Create patient
+POST {{baseUrl}}/patients/
+Content-Type: application/json
+Authorization: Bearer {{accessToken}}
+
+{
+  "full_name": "Rahul Mehta",
+  "date_of_birth": "1994-05-12",
+  "gender": "male",
+  "phone": "9876543210",
+  "blood_group": "O+",
+  "medical_history": "Hypertension"
+}
+
+### List patients
+GET {{baseUrl}}/patients/
+Authorization: Bearer {{accessToken}}
+
+### Create doctor
+POST {{baseUrl}}/doctors/
+Content-Type: application/json
+Authorization: Bearer {{accessToken}}
+
+{
+  "full_name": "Dr. Kavita Menon",
+  "specialization": "Cardiology",
+  "license_number": "MED-1001",
+  "email": "kavita@example.com",
+  "phone": "9988776655",
+  "experience_years": 12,
+  "available": true
+}
+
+### List doctors
+GET {{baseUrl}}/doctors/
+Authorization: Bearer {{accessToken}}
+
+### Assign doctor to patient
+POST {{baseUrl}}/mappings/
+Content-Type: application/json
+Authorization: Bearer {{accessToken}}
+
+{
+  "patient": 1,
+  "doctor": 1,
+  "notes": "Cardiology referral"
+}
+
+### List mappings
+GET {{baseUrl}}/mappings/
+Authorization: Bearer {{accessToken}}
+
+### List mappings for patient id 1
+GET {{baseUrl}}/mappings/1/
+Authorization: Bearer {{accessToken}}
+
+### Delete mapping id 1
+DELETE {{baseUrl}}/mappings/1/
+Authorization: Bearer {{accessToken}}
